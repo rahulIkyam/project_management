@@ -8,3 +8,5 @@ const mSaveButtonBorder = Color(0x6EB1E1FF);
 const mGreyDivider = Color(0x1F000000);
 const mTextFieldBorder = Color(0xff9FB3C8);
 const mErrorColor = Color(0xFFC62828);
+const imageColor = Color(0XFFff4f5a);
+const imageColor1 = Color(0XFF385a64);

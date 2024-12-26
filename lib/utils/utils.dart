@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 import '../static_data/colors.dart';
@@ -23,13 +23,13 @@ class Utils{
     return  InputDecoration(
       constraints: BoxConstraints(maxHeight: error==true ? 50:30),
       hintText: hintText,
-      hintStyle: const TextStyle(fontSize: 11),
+      hintStyle: const TextStyle(fontSize: 11, color: imageColor1),
       border: const OutlineInputBorder(
           borderSide: BorderSide(color:  Colors.blue)),
       counterText: '',
       contentPadding: const EdgeInsets.fromLTRB(12, 00, 0, 0),
       enabledBorder:const OutlineInputBorder(borderSide: BorderSide(color: mTextFieldBorder)),
-      focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
+      focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: imageColor1)),
     );
   }
 
@@ -40,7 +40,8 @@ class Utils{
         borderSide: BorderSide(color: Colors.blue, width: 1.0), // Adjusted thickness
       ),
       hintText: hintText,
-      hintStyle: const TextStyle(fontSize: 11),
+      hintStyle: const TextStyle(fontSize: 11, color: imageColor1),
+      label: Text(hintText,style: const TextStyle(fontSize: 11,color: imageColor1)),
       counterText: '',
       contentPadding: const EdgeInsets.fromLTRB(12, 8, 10, 10),
       enabledBorder: const OutlineInputBorder(
@@ -53,7 +54,7 @@ class Utils{
         borderSide: BorderSide(color:  Color(0xffC62828), width: 1.0), // Adjusted thickness
       ),
       focusedBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.blue, width: 1.0), // Adjusted thickness
+        borderSide: BorderSide(color: imageColor1, width: 1.0), // Adjusted thickness
       ),
     );
   }
@@ -63,11 +64,11 @@ class Utils{
       border: const OutlineInputBorder(
           borderSide: BorderSide(color:  Colors.blue)),
       hintText: hintText,
-      hintStyle: const TextStyle(fontSize: 11),
+      hintStyle: const TextStyle(fontSize: 11, color: imageColor1),
       counterText: '',
       contentPadding: const EdgeInsets.fromLTRB(12, 8, 10, 10),
       enabledBorder:const OutlineInputBorder(borderSide: BorderSide(color: mTextFieldBorder)),
-      focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
+      focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: imageColor1)),
     );
   }
 

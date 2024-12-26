@@ -1,11 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:project_management/milestoe_screens/add_milestone.dart';
+import 'package:project_management/milestoe_screens/add_milestone2.dart';
 import 'package:project_management/milestone_provider/milestoneProvider.dart';
 import 'package:project_management/utils/routes/routes.dart';
 import 'package:project_management/utils/routes/routes_name.dart';
 import 'package:project_management/view_model/auth_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
 void main() async{
@@ -19,11 +20,24 @@ void main() async{
     print("Error initializing Firebase: $e");
     return;
   }
-  runApp(const MyApp());
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool isLoggedIn = prefs.getBool("isLoggedIn") ?? false;
+  String? loginTimestamp = prefs.getString("loginTimestamp");
+
+  if(isLoggedIn && loginTimestamp != null){
+    final lastLoginTime = DateTime.parse(loginTimestamp);
+    final difference = DateTime.now().difference(lastLoginTime);
+    if(difference.inMinutes >= 30){
+      await prefs.clear();
+      isLoggedIn = false;
+    }
+  }
+  runApp( MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+  const MyApp({super.key, required this.isLoggedIn});
 
   // This widget is the root of your application.
   @override
@@ -33,11 +47,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AuthViewModel(),),
         ChangeNotifierProvider(create: (context) => MilestoneProvider(),)
       ],
-      child: const MaterialApp(
+      child:  MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: RoutesName.login,
+        initialRoute: isLoggedIn ? RoutesName.home : RoutesName.login,
         onGenerateRoute: Routes.generateRoute,
-        // home: AddMilestone(),
+        // home: MileStone2(),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,9 @@ class _LoginScreenState extends State<LoginScreen> {
   bool showHidePassword=true;
   bool passWordColor = false;
   bool isLoading = false;
+  final _verticalScrollController = ScrollController();
+  final _horizontalScrollController = ScrollController();
+  final _verticalScrollController1 = ScrollController();
   String userUid = "";
   void passwordHideAndViewFunc(){
     setState(() {
@@ -50,6 +54,8 @@ class _LoginScreenState extends State<LoginScreen> {
       String userUid = await firebaseGetUserUid(userId);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString("userUid", userUid);
+      await prefs.setBool("isLoggedIn", true);
+      await prefs.setString("loginTimestamp", DateTime.now().toIso8601String());
       if(credential.user != null){
         FirebaseFirestore.instance.collection("users").doc(credential.user?.uid);
       }
@@ -125,90 +131,55 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
+    print('----- screen width -----');
+    print(screenWidth);
     return Scaffold(
       backgroundColor: Colors.white,
-      body: isLoading ? const Center(child: CircularProgressIndicator(),) : Center(
-        child: SizedBox(
-          width: 300,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text("Login to your account",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20, color: Colors.blue)),
-              const SizedBox(height: 20),
-              const Text("Username",style: TextStyle(fontWeight: FontWeight.bold),),
-              const SizedBox(height: 10),
-              SizedBox(height: 30,
-                child: TextField(
-                  onChanged: (value) {},
-                  onEditingComplete: () {
-                    FocusScope.of(context).requestFocus(passwordFocusNode);
-                  },
-                  controller: userName,
-                  style: const TextStyle(fontSize: 12),
-                  decoration: decorationInput3("Enter user Email"),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text("Password",style: TextStyle(fontWeight: FontWeight.bold),),
-              const SizedBox(height: 10),
-              SizedBox(height: 30,
-                child: TextField(
-                  obscureText: showHidePassword,
-                  enableSuggestions: false,
-                  autocorrect: false,
-                  controller: password,
-                  onEditingComplete: () {
-                    _handleLogin();
-                  },
-                  onChanged: (value){},
-                  style: const TextStyle(fontSize: 12),
-                  decoration: decorationInputPassword("Enter user Password",passWordColor, showHidePassword,passwordHideAndViewFunc),
-                  onSubmitted: (v)  async {},
-                ),
-              ),
-              const SizedBox(height: 20),
-              // Row(
-              //   crossAxisAlignment: CrossAxisAlignment.center,
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: [
-              //     InkWell(
-              //       onTap: () {
-              //         Navigator.of(context).push(PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const FirebaseResetPassword(),));
-              //       },
-              //       child: const Text(
-              //         "Forgot Password ?",
-              //         style: TextStyle(
-              //           fontSize: 12,
-              //           // decoration: TextDecoration.underline,
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              const SizedBox(height: 20),
-              Container(
-                width: 300,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
-                  color: Colors.blue,
-                ),
-                child: TextButton(
-                    onPressed: () async {
+      body: isLoading ? const Center(child: CircularProgressIndicator(),) : AdaptiveScrollbar(
+        underColor: Colors.blueGrey.withOpacity(0.3),
+        sliderDefaultColor: Colors.grey.withOpacity(0.7),
+        sliderActiveColor: Colors.grey,
+        controller: _verticalScrollController,
+        child: SingleChildScrollView(
+          controller: _verticalScrollController,
+          scrollDirection: Axis.vertical,
+          child: Center(
+            child: SizedBox(
+              // width: screenWidth,
+              child: screenWidth < 950 ?
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: screenHeight*0.2,),
+                  SizedBox(
+                    width: screenWidth*0.5,
+                    child: Image.asset("assets/images/task_image.jpg"),
+                  ),
+                  SizedBox(height: screenHeight*0.1,),
+                  loginFields()
 
-                      // Navigator.pushNamed(context, RoutesName.userManagement);
-                      // Navigator.of(context).push(PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => const AddProject2(),));
-                      if(userName.text.isEmpty){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Enter User Name")));
-                      }else if(password.text.isEmpty){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Enter Password")));
-                      }else{
-                        _handleLogin();
+                ],
+              ) :
+              Column(
+                children: [
+                  SizedBox(height: screenHeight*0.2,),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: screenWidth*0.4,
+                        child: Image.asset("assets/images/task_image.jpg"),
+                      ),
+                      SizedBox(width: screenWidth*0.1,),
+                      loginFields()
 
-                      }
-                    }, child: const Text("Login",style:  TextStyle(color: Colors.white,),)),
+                    ],
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -220,6 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         label: Text(
           hintString,
+          style: const TextStyle(color: imageColor1),
         ),
         counterText: '',labelStyle: const TextStyle(fontSize: 12),
         contentPadding:  const EdgeInsets.fromLTRB(12, 00, 0, 0),
@@ -236,6 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return InputDecoration(
         label: Text(
           hintString,
+          style: const TextStyle(color: imageColor1),
         ),
         suffixIcon: IconButton(
           icon: Icon(
@@ -253,6 +226,71 @@ class _LoginScreenState extends State<LoginScreen> {
         focusedBorder:  const OutlineInputBorder(borderSide:  BorderSide(color: Color(0xff00004d))),
         border:   const OutlineInputBorder(borderSide:  BorderSide(color: Color(0xff00004d)))
 
+    );
+  }
+
+  Widget loginFields(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text("Login to your account",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20, color: imageColor)),
+        const SizedBox(height: 20),
+        const Text("Username",style: TextStyle(fontWeight: FontWeight.bold, color: imageColor1),),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 30,
+          width: 300,
+          child: TextField(
+            onChanged: (value) {},
+            onEditingComplete: () {
+              FocusScope.of(context).requestFocus(passwordFocusNode);
+            },
+            controller: userName,
+            style: const TextStyle(fontSize: 12),
+            decoration: decorationInput3("Enter user Email"),
+          ),
+        ),
+        const SizedBox(height: 20),
+        const Text("Password",style: TextStyle(fontWeight: FontWeight.bold, color: imageColor1),),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 30,
+          width: 300,
+          child: TextField(
+            obscureText: showHidePassword,
+            enableSuggestions: false,
+            autocorrect: false,
+            controller: password,
+            onEditingComplete: () {
+              _handleLogin();
+            },
+            onChanged: (value){},
+            style: const TextStyle(fontSize: 12),
+            decoration: decorationInputPassword("Enter user Password",passWordColor, showHidePassword,passwordHideAndViewFunc),
+            onSubmitted: (v)  async {},
+          ),
+        ),
+        const SizedBox(height: 20),
+        Container(
+          width: 300,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(4)),
+            color: imageColor,
+          ),
+          child: TextButton(
+              onPressed: () async {
+                if(userName.text.isEmpty){
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Enter User Name")));
+                }else if(password.text.isEmpty){
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Enter Password")));
+                }else{
+                  _handleLogin();
+
+                }
+              }, child: const Text("Login",style:  TextStyle(color: Colors.white,),)),
+        ),
+      ],
     );
   }
 }

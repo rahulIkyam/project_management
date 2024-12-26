@@ -132,12 +132,8 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                       padding: const EdgeInsets.only(right: 10),
                       child: MaterialButton(
                         height: 40,
-                        color: Colors.blue,
+                        color: imageColor,
                         onPressed: () async{
-                          // String parsedDateForPost(String date){
-                          //   DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
-                          //   return DateFormat("yyyy-MM-dd").format(parsedDate);
-                          // }
                           Map newProject = {
                             "clientName": dropdownValue.isNotEmpty ? dropdownValue : "",
                             "projectName": projectNameController.text.trim(),
@@ -164,7 +160,11 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                             "nbPercentage": int.tryParse(nbPerController.text) ?? 0,
                             // "selectedUser" : selectedUsers
                           };
-                          authViewModel.createProject(newProject, context);
+                          if(dropdownValue.isNotEmpty){
+                            authViewModel.createProject(newProject, context).then((value){
+                              authViewModel.setLoading(isLoading);
+                            });
+                          }
                         },
                         child: const Text("Save",style: TextStyle(color: Colors.white)),
                       ),
@@ -205,13 +205,13 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              const Text("New Project",style: TextStyle(fontWeight: FontWeight.bold),),
+                                              const Text("New Project",style: TextStyle(fontWeight: FontWeight.bold, color: imageColor),),
                                               const SizedBox(height: 10,),
                                               Container(
                                                 height: 1,
                                                 width: screenWidth,
                                                 decoration: const BoxDecoration(
-                                                  color: Colors.black,
+                                                  color: imageColor1,
                                                 ),
                                               ),
                                               const SizedBox(height: 15,),
@@ -219,7 +219,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                 children: [
                                                   const SizedBox(
                                                       width: 200,
-                                                      child: Text("Client")
+                                                      child: Text("Client", style: TextStyle(fontWeight: FontWeight.bold, color: imageColor1),)
                                                   ),
                                                   Container(
                                                     height: 30,
@@ -237,7 +237,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                       underline: Container(),
                                                       style: const TextStyle(fontSize: 11),
                                                       value: dropdownValue.isEmpty ? null : dropdownValue,
-                                                      hint: const Text("Select Client"),
+                                                      hint: const Text("Select Client", style: TextStyle(color: imageColor1),),
                                                       items: clientList.map((String items) {
                                                         return DropdownMenuItem(
                                                           value: items,
@@ -277,7 +277,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                       });
                                                     },
                                                     child: MaterialButton(
-                                                      color: isHovered ? Colors.white : Colors.blue,
+                                                      color: isHovered ? Colors.white : imageColor,
                                                       onPressed: () {
                                                         setState(() {
                                                           if (isNewClient) {
@@ -297,7 +297,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                         isNewClient ? "Add Client" : "+ New Client",
                                                         style: TextStyle(
                                                           fontSize: 12,
-                                                          color: isHovered ? Colors.black : Colors.white,
+                                                          color: isHovered ? imageColor : Colors.white,
                                                         ),
                                                       ),
                                                     ),
@@ -309,7 +309,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                 children: [
                                                   const SizedBox(
                                                       width: 200,
-                                                      child: Text("Project Name")
+                                                      child: Text("Project Name",style: TextStyle(fontWeight: FontWeight.bold, color: imageColor1),)
                                                   ),
                                                   SizedBox(
                                                     width: 200,
@@ -333,7 +333,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                 children: [
                                                   const SizedBox(
                                                       width: 200,
-                                                      child: Text("Project Code")
+                                                      child: Text("Project Code",style: TextStyle(fontWeight: FontWeight.bold, color: imageColor1),)
                                                   ),
                                                   SizedBox(
                                                     width: 200,
@@ -357,7 +357,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                 children: [
                                                   const SizedBox(
                                                       width: 200,
-                                                      child: Text("Dates")
+                                                      child: Text("Dates",style: TextStyle(fontWeight: FontWeight.bold, color: imageColor1),)
                                                   ),
                                                   SizedBox(
                                                     height: 30,
@@ -424,7 +424,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                 children: [
                                                   const SizedBox(
                                                       width: 200,
-                                                      child: Text("Notes")
+                                                      child: Text("Notes", style: TextStyle(fontWeight: FontWeight.bold, color: imageColor1),)
                                                   ),
                                                   SizedBox(
                                                     height: 100,
@@ -439,13 +439,13 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                 ],
                                               ),
                                               const SizedBox(height: 15,),
-                                              const Text("Project Type",style: TextStyle(fontWeight: FontWeight.bold),),
+                                              const Text("Project Type",style: TextStyle(fontWeight: FontWeight.bold, color: imageColor),),
                                               const SizedBox(height: 10,),
                                               Container(
                                                 height: 1,
                                                 width: screenWidth,
                                                 decoration: const BoxDecoration(
-                                                  color: Colors.black,
+                                                  color: imageColor1,
                                                 ),
                                               ),
                                               const SizedBox(height: 15,),
@@ -484,7 +484,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                 padding: EdgeInsets.only(top: 4),
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown,
-                                                  child: Text("Time & Material", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                                                  child: Text("Time & Material", style: TextStyle(color: imageColor1, fontWeight: FontWeight.bold)),
                                                 ),
                                               ),
                                             ),
@@ -494,7 +494,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                 padding: EdgeInsets.only(top: 7),
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown,
-                                                  child: Text("Bill by the hour, with billable rates", style: TextStyle(fontSize: 10, color: Colors.black),textAlign: TextAlign.center),
+                                                  child: Text("Bill by the hour, with billable rates", style: TextStyle(fontSize: 10, color: imageColor1),textAlign: TextAlign.center),
                                                 ),
                                               ),
                                             )
@@ -510,7 +510,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                 padding: EdgeInsets.only(top: 4),
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown,
-                                                  child: Text("Fixed Fee", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                                                  child: Text("Fixed Fee", style: TextStyle(color: imageColor1, fontWeight: FontWeight.bold)),
                                                 ),
                                               ),
                                             ),
@@ -520,7 +520,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                 padding: EdgeInsets.only(top: 7),
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown,
-                                                  child: Text("Bill a set price, regardless of time tracked", style: TextStyle(fontSize: 10, color: Colors.black),textAlign: TextAlign.center),
+                                                  child: Text("Bill a set price, regardless of time tracked", style: TextStyle(fontSize: 10, color: imageColor1),textAlign: TextAlign.center),
                                                 ),
                                               ),
                                             )
@@ -536,7 +536,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                 padding: EdgeInsets.only(top: 4),
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown,
-                                                  child: Text("Non-Billable", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                                                  child: Text("Non-Billable", style: TextStyle(color: imageColor1, fontWeight: FontWeight.bold)),
                                                 ),
                                               ),
                                             ),
@@ -546,7 +546,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                                 padding: EdgeInsets.only(top: 7),
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown,
-                                                  child: Text("Not billed to a client", style: TextStyle(fontSize: 10, color: Colors.black),textAlign: TextAlign.center),
+                                                  child: Text("Not billed to a client", style: TextStyle(fontSize: 10, color: imageColor1),textAlign: TextAlign.center),
                                                 ),
                                               ),
                                             )
@@ -604,7 +604,7 @@ class _AddProjectState extends State<AddProject> with SingleTickerProviderStateM
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              const Text("Teams",style: TextStyle(fontWeight: FontWeight.bold),),
+                                              const Text("Teams",style: TextStyle(fontWeight: FontWeight.bold,color: imageColor1),),
                                               const SizedBox(height: 10,),
                                               Container(
                                                 height: 1,
@@ -682,9 +682,9 @@ Widget buildTM(){
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Billable Rates", style: TextStyle(fontWeight: FontWeight.bold),),
+            const Text("Billable Rates", style: TextStyle(fontWeight: FontWeight.bold, color: imageColor1),),
             const SizedBox(height: 5,),
-            const Text("We need billable rates to track your projects billable amount"),
+            const Text("We need billable rates to track your projects billable amount", style: TextStyle(color: imageColor1)),
             const SizedBox(height: 10,),
             SizedBox(
               width: 200,
@@ -718,9 +718,9 @@ Widget buildTM(){
               ),
             ),
             const SizedBox(height: 20,),
-            const Text("Budget", style: TextStyle(fontWeight: FontWeight.bold),),
+            const Text("Budget", style: TextStyle(fontWeight: FontWeight.bold, color: imageColor1),),
             const SizedBox(height: 5,),
-            const Text("Set a budget to track project progress"),
+            const Text("Set a budget to track project progress", style: TextStyle(color: imageColor1)),
             const SizedBox(height: 10,),
             Row(
               children: [
@@ -784,7 +784,7 @@ Widget buildTM(){
                       });
                     },
                 ),
-                const Text("Budget resets every month")
+                const Text("Budget resets every month", style: TextStyle(color: imageColor1))
               ],
             ),
             const SizedBox(height: 5,),
@@ -799,7 +799,7 @@ Widget buildTM(){
                       });
                     },
                 ),
-                const Text("Send email alerts if project exceeds"),
+                const Text("Send email alerts if project exceeds", style: TextStyle(color: imageColor1)),
                 const SizedBox(width: 5,),
                 SizedBox(
                   width: 100,
@@ -816,7 +816,7 @@ Widget buildTM(){
                   ),
                 ),
                 const SizedBox(width: 5,),
-                const Text("% of budget"),
+                const Text("% of budget", style: TextStyle(color: imageColor1)),
               ],
             ),
 
@@ -843,9 +843,9 @@ Widget buildTM(){
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Project fees", style: TextStyle(fontWeight: FontWeight.bold),),
+            const Text("Project fees", style: TextStyle(fontWeight: FontWeight.bold,color: imageColor1),),
             const SizedBox(height: 5,),
-            const Text("Enter the amount you plan to invoice"),
+            const Text("Enter the amount you plan to invoice", style: TextStyle(color: imageColor1)),
             const SizedBox(height: 10,),
             Row(
               children: [
@@ -867,9 +867,9 @@ Widget buildTM(){
               ],
             ),
             const SizedBox(height: 20,),
-            const Text("Budget", style: TextStyle(fontWeight: FontWeight.bold),),
+            const Text("Budget", style: TextStyle(fontWeight: FontWeight.bold, color: imageColor1),),
             const SizedBox(height: 5,),
-            const Text("Set a budget to track project progress"),
+            const Text("Set a budget to track project progress", style: TextStyle(color: imageColor1)),
             const SizedBox(height: 10,),
             Row(
               children: [
@@ -933,7 +933,7 @@ Widget buildTM(){
                     });
                   },
                 ),
-                const Text("Budget resets every month")
+                const Text("Budget resets every month", style: TextStyle(color: imageColor1))
               ],
             ),
             const SizedBox(height: 5,),
@@ -948,7 +948,7 @@ Widget buildTM(){
                     });
                   },
                 ),
-                const Text("Send email alerts if project exceeds"),
+                const Text("Send email alerts if project exceeds", style: TextStyle(color: imageColor1)),
                 const SizedBox(width: 5,),
                 SizedBox(
                   width: 100,
@@ -965,7 +965,7 @@ Widget buildTM(){
                   ),
                 ),
                 const SizedBox(width: 5,),
-                const Text("% of budget"),
+                const Text("% of budget", style: TextStyle(color: imageColor1)),
               ],
             ),
 
@@ -994,9 +994,9 @@ Widget buildTM(){
           children: [
 
             const SizedBox(height: 20,),
-            const Text("Budget", style: TextStyle(fontWeight: FontWeight.bold),),
+            const Text("Budget", style: TextStyle(fontWeight: FontWeight.bold, color: imageColor1),),
             const SizedBox(height: 5,),
-            const Text("Set a budget to track project progress"),
+            const Text("Set a budget to track project progress", style: TextStyle(color: imageColor1)),
             const SizedBox(height: 10,),
             Row(
               children: [
@@ -1060,7 +1060,7 @@ Widget buildTM(){
                     });
                   },
                 ),
-                const Text("Budget resets every month")
+                const Text("Budget resets every month", style: TextStyle(color: imageColor1))
               ],
             ),
             const SizedBox(height: 5,),
@@ -1075,7 +1075,7 @@ Widget buildTM(){
                     });
                   },
                 ),
-                const Text("Send email alerts if project exceeds"),
+                const Text("Send email alerts if project exceeds", style: TextStyle(color: imageColor1)),
                 const SizedBox(width: 5,),
                 SizedBox(
                   width: 100,
@@ -1092,7 +1092,7 @@ Widget buildTM(){
                   ),
                 ),
                 const SizedBox(width: 5,),
-                const Text("% of budget"),
+                const Text("% of budget", style: TextStyle(color: imageColor1)),
               ],
             ),
 

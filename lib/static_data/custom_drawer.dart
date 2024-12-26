@@ -24,6 +24,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
   bool masterHovered = false;
   bool masterExpanded = false;
   bool masterColor = false;
+  bool mileStoneHovered = false;
+  bool mileStoneExpanded = false;
+  bool mileStoneColor = false;
   bool createMasterHovered = false;
   bool userManagementHovered = false;
   bool userManagementExpanded = false;
@@ -41,6 +44,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
       masterHovered = false;
     }
     if(selectedDestination == 1.1){
+      masterHovered = false;
+      masterExpanded = true;
+      userManagementHovered = false;
+    }
+    if(selectedDestination == 1.2){
       masterHovered = false;
       masterExpanded = true;
       userManagementHovered = false;
@@ -214,6 +222,43 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       selectedDestination = 1.1;
                                     });
                                     Navigator.pushNamed(context, RoutesName.createProject);
+                                    // Navigator.of(context).push(PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => CreateMaster(),));
+                                  },
+                                ),
+                              ),
+                              MouseRegion(
+                                onEnter: (event) {
+                                  setState(() {
+                                    masterColor = true;
+                                  });
+                                },
+                                onExit: (event) {
+                                  setState(() {
+                                    masterColor = false;
+                                  });
+                                },
+                                child: ListTile(
+                                  hoverColor: mHoverColor,
+                                  selectedTileColor: Colors.blue,
+                                  selectedColor: Colors.black,
+                                  title: Center(
+                                    child: Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 15.0),
+                                        child: Text(
+                                            drawerWidth == 60 ? "" : "Milestone",
+                                            style: TextStyle(color:selectedDestination==1.2?(masterColor==true? Colors.black:Colors.white):Colors.black)
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  selected: selectedDestination == 1.2,
+                                  onTap: () {
+                                    setState(() {
+                                      selectedDestination = 1.2;
+                                    });
+                                    Navigator.pushNamed(context, RoutesName.createMilestone);
                                     // Navigator.of(context).push(PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => CreateMaster(),));
                                   },
                                 ),

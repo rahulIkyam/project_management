@@ -6,7 +6,6 @@ import 'package:project_management/res/app_url.dart';
 import 'package:project_management/utils/routes/routes_name.dart';
 import 'package:http/http.dart' as http;
 import '../static_data/colors.dart';
-import '../static_data/static_list.dart';
 import '../widgets/outlined_buttons.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -53,7 +52,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future getAllProjects() async{
-    isLoading = true;
+    // isLoading = true;
+    isLoading = false;
     try{
       final response = await http.get(Uri.parse(AppUrl.getProject));
       if(response.statusCode == 200){
@@ -173,15 +173,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children:  [
-                                  const Text("Project List ", style: TextStyle(color: Colors.blue, fontSize: 15, fontWeight: FontWeight.bold),),
+                                  const Text("Project List ", style: TextStyle(color: imageColor, fontSize: 15, fontWeight: FontWeight.bold),),
                                   SizedBox(
                                     height: 35,
                                     width: 130,
                                     child: OutlinedMButton(
                                       text: "+  New Project",
-                                      buttonColor: mSaveButton,
+                                      buttonColor: imageColor,
                                       textColor: Colors.white,
-                                      borderColor: mSaveButton,
+                                      borderColor: imageColor,
                                       onTap: () {
                                         Navigator.pushNamed(context, RoutesName.createProject);
                                       },
@@ -359,7 +359,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     child: SizedBox(
                                                       // height: 25,
                                                       width: 200,
-                                                      child: Text(paginatedList[i]['projectCode']??"",style: const TextStyle(fontSize: 11)),
+                                                      child: Text(paginatedList[i]['projectCode']??"",style: const TextStyle(fontSize: 11, color: imageColor1)),
                                                     ),
                                                   ),
                                                   Padding(
@@ -367,7 +367,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     child: SizedBox(
                                                       // height: 25,
                                                       width: 200,
-                                                      child: Text(paginatedList[i]['projectName']??"",style: const TextStyle(fontSize: 11)),
+                                                      child: Text(paginatedList[i]['projectName']??"",style: const TextStyle(fontSize: 11, color: imageColor1)),
                                                     ),
                                                   ),
                                                   Padding(
@@ -375,7 +375,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     child: SizedBox(
                                                       // height: 25,
                                                       width: 200,
-                                                      child: Text(paginatedList[i]['clientName']??"",style: const TextStyle(fontSize: 11)),
+                                                      child: Text(paginatedList[i]['clientName']??"",style: const TextStyle(fontSize: 11, color: imageColor1)),
                                                     ),
                                                   ),
                                                   Padding(
@@ -383,7 +383,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     child: SizedBox(
                                                       // height: 25,
                                                       width: 200,
-                                                      child: Text(paginatedList[i]['clientId']??"",style: const TextStyle(fontSize: 11)),
+                                                      child: Text(paginatedList[i]['clientId']??"",style: const TextStyle(fontSize: 11, color: imageColor1)),
                                                     ),
                                                   ),
                                                   Padding(
@@ -391,7 +391,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     child: SizedBox(
                                                       // height: 25,
                                                       width: 200,
-                                                      child: Text(paginatedList[i]['startingDate']??"",style: const TextStyle(fontSize: 11)),
+                                                      child: Text(paginatedList[i]['startingDate']??"",style: const TextStyle(fontSize: 11, color: imageColor1)),
                                                     ),
                                                   ),
                                                   Padding(
@@ -399,7 +399,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     child: SizedBox(
                                                       // height: 25,
                                                       width: 200,
-                                                      child: Text(paginatedList[i]['endingDate']??"",style: const TextStyle(fontSize: 11)),
+                                                      child: Text(paginatedList[i]['endingDate']??"",style: const TextStyle(fontSize: 11, color: imageColor1)),
                                                     ),
                                                   ),
 
@@ -407,7 +407,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     padding: EdgeInsets.only(right: 8),
                                                     child: Icon(size: 18,
                                                       Icons.arrow_circle_right,
-                                                      color: Colors.blue,
+                                                      color: imageColor1,
                                                     ),
                                                   ),)
                                                 ],
@@ -445,7 +445,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 // Text("${startVal + 15 > filteredList.length ? filteredList.length : startVal + 1}-${startVal + 15 > filteredList.length ? filteredList.length : startVal +15} of ${filteredList.length}",style: const TextStyle(color: Colors.grey)),
                                 Text(
                                   "${startVal + 1} - ${(startVal + pageSize) > filteredList.length ? filteredList.length : startVal + pageSize} of ${filteredList.length}",
-                                  style: const TextStyle(color: Colors.black),
+                                  style: const TextStyle(color: imageColor1),
                                 ),
                                 const SizedBox(width: 10,),
                                 if (startVal > 0)
@@ -504,14 +504,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           },
           child: const Icon(Icons.close,size: 14,)),
       border: const OutlineInputBorder(
-          borderSide: BorderSide(color:  Colors.blue)),
+          borderSide: BorderSide(color:  imageColor1)),
       constraints:  const BoxConstraints(maxHeight:35),
       hintText: hintText,
       hintStyle: const TextStyle(fontSize: 11),
       counterText: '',
       contentPadding: const EdgeInsets.fromLTRB(12, 00, 0, 0),
       enabledBorder: OutlineInputBorder(borderSide: BorderSide(color:error==true? mErrorColor :mTextFieldBorder)),
-      focusedBorder:  OutlineInputBorder(borderSide: BorderSide(color:error==true? mErrorColor :Colors.blue)),
+      focusedBorder:  OutlineInputBorder(borderSide: BorderSide(color:error==true? mErrorColor :imageColor1)),
     );
   }
   searchCustomerNameDecoration ({required String hintText, bool? error}){
@@ -532,14 +532,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           },
           child: const Icon(Icons.close,size: 14,)),
       border: const OutlineInputBorder(
-          borderSide: BorderSide(color:  Colors.blue)),
+          borderSide: BorderSide(color:  imageColor1)),
       constraints:  const BoxConstraints(maxHeight:35),
       hintText: hintText,
       hintStyle: const TextStyle(fontSize: 11),
       counterText: '',
       contentPadding: const EdgeInsets.fromLTRB(12, 00, 0, 0),
       enabledBorder: OutlineInputBorder(borderSide: BorderSide(color:error==true? mErrorColor :mTextFieldBorder)),
-      focusedBorder:  OutlineInputBorder(borderSide: BorderSide(color:error==true? mErrorColor :Colors.blue)),
+      focusedBorder:  OutlineInputBorder(borderSide: BorderSide(color:error==true? mErrorColor :imageColor1)),
     );
   }
 }

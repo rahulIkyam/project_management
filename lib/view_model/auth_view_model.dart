@@ -4,6 +4,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:project_management/utils/utils.dart';
 
 import '../repository/auth_repository.dart';
 import '../utils/routes/routes_name.dart';
@@ -98,6 +99,9 @@ class AuthViewModel with ChangeNotifier{
       if (kDebugMode) {
         print('-------');
         print(value.toString());
+        if(value.toString().contains("error")){
+          Utils.snackBar("Internal Server Error", context);
+        }
       }
     }).onError((error, stackTrace) {
       setLoading(false);
